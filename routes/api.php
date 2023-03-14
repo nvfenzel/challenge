@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ApiAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,10 @@ Route::post('/register', [ApiController::class, 'register']);
 
 Route::post('/login', [ApiController::class, 'login']);
 
-// Route::middleware('auth:sanctum')->get('data', function () {
-//     return response()->json('Hello Nicolassss', 200);
-// });
+Route::middleware(['auth:sanctum', 'isAdmin'])->post('/autorization', [ApiAdminController::class, 'autorization']);
+
+Route::middleware(['auth:sanctum', 'isAdmin'])->get('/all_players', [ApiAdminController::class, 'players']);
+
+Route::middleware(['auth:sanctum', 'isAdmin'])->post('/new_item', [ApiAdminController::class, 'item']);
+
+Route::middleware(['auth:sanctum', 'isAdmin'])->get('/items', [ApiAdminController::class, 'items']);

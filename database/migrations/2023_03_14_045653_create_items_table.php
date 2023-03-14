@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->float('pt_defense',5, 2);
             $table->float('pt_attack',5, 2);
-            $table->string('type');
-            $table->unsignedBigInteger('last_attack_to');
-            $table->foreign('last_attack_to')->references('id')->on('users');
-            $table->string('last_attack_type');
+            $table->enum('type', ['bota', 'armadura', 'arma']);
             $table->timestamps();
         });
     }

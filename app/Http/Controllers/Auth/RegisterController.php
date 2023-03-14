@@ -66,17 +66,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        Player::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'type' => $data['type'],
-        ]);
-
-        return 
-        User::create([
+        $user_create = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // dd($user_create['id']);
+
+        Player::insert([
+            'user_id' => $user_create['id'],
+            'type' => $data['type'],
+        ]);
+
+        return $user_create;
     }
 }

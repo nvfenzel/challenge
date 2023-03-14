@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Player extends Model
 {
@@ -12,8 +13,8 @@ class Player extends Model
     protected $fillable = [
         'name',
         'email',
-        'account',
-        'password',
+        'status',
+        'life',
     ];
 
     /**
@@ -26,4 +27,8 @@ class Player extends Model
         'remember_token',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

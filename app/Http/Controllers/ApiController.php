@@ -30,6 +30,11 @@ class ApiController extends Controller
         'password' => Hash::make($request->password),
     ]);
 
+    $player_create = Player::insert([
+        'user_id' => $user_create->id,
+        'type' => $request->type,
+    ]);
+
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {

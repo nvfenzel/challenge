@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('status')->default('inactive');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->enum('status', ['activo', 'inactivo'])->default('inactivo');
             $table->enum('type', ['human', 'zombie'])->default('human')->nullable();
             $table->float('life',5, 2)->default(100);
             $table->timestamps();

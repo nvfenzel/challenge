@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('item_id');
             $table->foreign('item_id')->references('id')->on('items');
+            $table->unsignedBigInteger('last_attack_to');
+            $table->foreign('last_attack_to')->references('id')->on('users');
+            $table->string('last_attack_type');
         });
     }
 

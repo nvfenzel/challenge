@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('status')->default('inactive');
+            $table->enum('type', ['human', 'zombie'])->default('human')->nullable();
+            $table->float('life',3, 2)->default(100);
             $table->timestamps();
         });
     }

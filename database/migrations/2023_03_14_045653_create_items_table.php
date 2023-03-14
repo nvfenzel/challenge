@@ -13,8 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('admin_controllers', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->float('pt_defense',3, 2);
+            $table->float('pt_attack',3, 2);
+            $table->string('type');
+            $table->unsignedBigInteger('last_attack_to');
+            $table->foreign('last_attack_to')->references('id')->on('users');
+            $table->string('last_attack_type');
             $table->timestamps();
         });
     }
@@ -26,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_controllers');
+        Schema::dropIfExists('items');
     }
 };

@@ -27,11 +27,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::middleware(['auth', 'isAdmin'])->prefix('account')->name('account.')->group(function () {
-
     Route::get('/admin', [AdminControllerController::class, 'index'])->name('admin');
 });
 
 Route::middleware(['auth', 'isUser'])->prefix('account')->name('account.')->group(function () {
-
-    Route::get('/player', [PlayerController::class, 'index'])->name('admin');
+    Route::get('/player', [PlayerController::class, 'index'])->name('player');
 });

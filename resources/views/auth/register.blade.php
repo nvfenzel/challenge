@@ -40,12 +40,12 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="account" class="col-md-4 col-form-label text-md-end">{{ __('Account') }}</label>
+                            <label for="type" class="col-md-4 col-form-label text-md-end">{{ __('Type') }}</label>
 
                             <div class="col-md-6">
-                                <select id="account" type='text' class="form-control" name="account" required>
-                                <option value="is_admin">Admin</option>
-                                <option value="is_user">User</option>
+                                <select id="type" type='text' class="form-control" name="type" required>
+                                <option value="human">Human</option>
+                                <option value="zombie">Zombie</option>
                                 </select>
                             </div>
                         </div>

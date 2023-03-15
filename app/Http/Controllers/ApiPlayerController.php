@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Player;
 use App\Models\User;
+use App\Models\Stock;
 use App\Models\Items;
 use App\Models\Outfit;
 use App\Models\Bota;
@@ -20,6 +21,97 @@ class ApiPlayerController extends Controller
     public function active()
     {
         return Player::where('status', 'activo')->get();
+    }
+
+    public function stock()
+    {
+        $my_player_id = Player::where('user_id', Auth::id())->first()->id;
+
+        if ($my_stock_array = Stock::where('player_id', $my_player_id)->get()->isNotEmpty()) {
+            $my_stock_array = Stock::where('player_id', $my_player_id)->get();
+            
+            $data=[];
+            foreach ($my_stock_array as $var) {
+                $stock_id = $var->item_id;
+                array_push($data,[
+                    Items::where('id', $stock_id)->first()
+                ]);
+            }
+            return $data;
+        }
+
+        if ($my_stock_array = Stock::where('player_id', $my_player_id)->get()->isEmpty()) {
+            return 'El jugador no tiene nada en el inventario';
+        }
+    }
+
+    public function add_stock(Request $request)
+    {
+        $request->validate
+        ([
+            'id' => ['required', 'numeric', 'exists:items,id']
+        ]);
+
+        Stock::create([
+            'player_id' =>  Player::where('user_id', Auth::id())->first()->id,
+            'item_id' => $request->id,
+        ]);
+
+        return 'Nuevo item agregado';
+    }
+
+    public function show_outfit(Request $request)
+    {
+        $outfit_bota = Outfit::where('player_id', Auth::id())->first()->bota_id;
+        $outfit_arma = Outfit::where('player_id', Auth::id())->first()->arma_id;
+        $outfit_armadura = Outfit::where('player_id', Auth::id())->first()->armadura_id;
+
+
+        $data_outfit=[Items::where('id', $outfit_bota)->first(), Items::where('id', $outfit_arma)->first(), Items::where('id', $outfit_armadura)->first()];
+
+        return $data_outfit;
+    }
+
+    public function outfit(Request $request)
+    {
+        $request->validate
+        ([
+            'id' => ['required', 'numeric', 'exists:items,id']
+        ]);
+       
+        $my_player_id = Player::where('user_id', Auth::id())->first()->id;
+
+        if ($my_stock_array = Stock::where('player_id', $my_player_id)->get()->isEmpty()) {
+            return 'Primero tienes que agregar algo a tu inventario';
+        }
+        
+        if (Items::where('id', $request->id)->first() && Stock::where('player_id', $my_player_id)->where('item_id', $request->id)->first()) {
+            if (Items::where('id', $request->id)->first()->type === 'bota') {
+                Outfit::updateOrInsert(
+                    ['player_id' => Auth::id()],
+                    ['bota_id' => $request->id]
+                );
+                return 'Bota cargada!';
+            }
+            if (Items::where('id', $request->id)->first()->type === 'armadura') {
+                Outfit::updateOrInsert(
+                    ['player_id' => Auth::id()],
+                    ['armadura_id' => $request->id]
+                );
+                return 'Armadura cargada!';
+            }
+            if (Items::where('id', $request->id)->first()->type === 'arma') {
+                Outfit::updateOrInsert(
+                    ['player_id' => Auth::id()],
+                    ['arma_id' => $request->id]
+                );
+                return 'Arma cargada!';
+            }
+        } else{
+            return 'No lo tengo en mi inventario, primero debo agragarlo a mi inventario para poder usarlo';
+        }
+
+
     }
 
     public function attack(Request $request)

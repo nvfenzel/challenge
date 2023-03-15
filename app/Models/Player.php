@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Outfit;
+use App\Models\Stock;
 use App\Models\LastAttack;
 
 class Player extends Model
@@ -42,5 +43,10 @@ class Player extends Model
     public function lastAttack()
     {
         return $this->hasOne(LastAttack::class);
+    }
+
+    public function stock_player()
+    {
+        return $this->hasMany(Stock::class);
     }
 }

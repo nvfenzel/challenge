@@ -63,8 +63,22 @@ Route::middleware(['auth:sanctum', 'isUser'])->group(function () {
     //Esta ruta recibe como método GET y obtiene todos los palyers que también estén activos y listos para pelear
     Route::get('/players_active', [ApiPlayerController::class, 'active']);
     
+    //Esta es la ruta de ataque
     Route::post('/player_atack', [ApiPlayerController::class, 'attack']);
-//     Route::post('/new_item', [ApiPlayerController::class, 'item']);
-//     Route::get('/items', [ApiPlayerController::class, 'items']);
-//     Route::post('/edit_item', [ApiPlayerController::class, 'edit']);
+
+    //Esta es la ruta para ver los items que hay
+    Route::get('/items', [ApiAdminController::class, 'items']);
+
+    //Esta es la ruta para ver el inventario que tengo
+    Route::get('/stock', [ApiPlayerController::class, 'stock']);
+
+    //Esta es la ruta para agregar un Item a mi inventario
+    Route::post('/add_outfit', [ApiPlayerController::class, 'outfit']);
+
+    //Esta es la ruta para agregar un Item a mi inventario
+    Route::post('/add_item', [ApiPlayerController::class, 'add_stock']);
+
+     //Esta es la ruta para ver mi outfit
+     Route::get('/show_outfit', [ApiPlayerController::class, 'show_outfit']);
+
 });

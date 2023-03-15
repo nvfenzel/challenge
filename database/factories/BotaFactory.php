@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Player>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\bota>
  */
-class PlayerFactory extends Factory
+class BotaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,7 +16,6 @@ class PlayerFactory extends Factory
      */
     public function definition()
     {
-        
         return [
             //
         ];

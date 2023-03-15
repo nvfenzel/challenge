@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('botas', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->float('pt_defense',5, 2);
-            $table->float('pt_attack',5, 2);
-            $table->enum('type', ['bota', 'armadura', 'arma']);
+            $table->unsignedBigInteger('bota_id')->nullable();
+            $table->foreign('bota_id')
+            ->references('id')
+            ->on('items')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('botas');
     }
 };

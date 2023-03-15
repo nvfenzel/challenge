@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Outfit;
 
 class Player extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'email',
+        'user_id',
         'status',
         'life',
+        'type',
     ];
 
     /**
@@ -30,5 +31,10 @@ class Player extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function outfit()
+    {
+        return $this->hasOne(Outfit::class);
     }
 }

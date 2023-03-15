@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('outfits', function (Blueprint $table) {
+        Schema::create('armas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('item_id');
-            $table->foreign('item_id')->references('id')->on('items');
+            $table->unsignedBigInteger('arma_id')->nullable();
+            $table->foreign('arma_id')
+            ->references('id')
+            ->on('items')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('outfits');
+        Schema::dropIfExists('armas');
     }
 };

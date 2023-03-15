@@ -17,7 +17,10 @@ class ItemsFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => fake()->unique()->word(1),
+            'pt_defense' => rand(0,100),
+            'pt_attack' => rand(0,100),
+            'type' => fake()->randomElement(['bota', 'arma', 'armadura']),
         ];
     }
 }

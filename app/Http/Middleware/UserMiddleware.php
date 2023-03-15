@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Player;
 
 class UserMiddleware
 {
@@ -17,7 +18,7 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->account==="is_user") {
+        if (Auth::user()->account==="is_user" && Player::where('user_id', Auth::id())->first()->status === 'activo') {
             return $next($request);
         } else {
             return redirect('/');

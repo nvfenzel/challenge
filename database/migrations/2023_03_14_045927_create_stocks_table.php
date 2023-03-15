@@ -15,13 +15,11 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('player_id');
+            $table->foreign('player_id')->references('id')->on('players');
+            $table->unsignedBigInteger('item_id')->nullable();
             $table->foreign('item_id')->references('id')->on('items');
-            $table->unsignedBigInteger('last_attack_to');
-            $table->foreign('last_attack_to')->references('id')->on('users');
-            $table->string('last_attack_type');
+            $table->timestamps();
         });
     }
 

@@ -47,12 +47,35 @@ class ApiAdminController extends Controller
             'pt_attack' => $request->pt_attack,
             'type' => $request->type,
         ]);
-
+        
         return $item_create;
     }
 
     public function items()
     {
         return Items::all();
+    }
+
+    public function edit(Request $request)
+    {
+        $request->validate([
+            'name' => [ 'string', 'max:255', 'unique:items'],
+            'pt_defense' => [ 'numeric', 'min:0', 'max:100'],
+            'pt_attack' => [ 'numeric', 'min:0', 'max:100'],
+        ]);
+
+            $items_update = Items::where('id', $request->id)->first();
+            
+            $request->name ? Items::where('id', $request->id)->update(['name'=> $request->name,]) : '';
+
+            $request->pt_defense ? Items::where('id', $request->id)->update(['pt_defense'=> $request->pt_defense,]): '';
+
+            $request->pt_attack ? Items::where('id', $request->id)->update(['pt_attack'=> $request->pt_attack,]): '';
+
+            $request->type ? Items::where('id', $request->id)->update(['type'=> $request->type,]) : '';
+
+            $data_item = Items::where('id', $request->id)->first();
+            
+            return "Se actualizó el siguiente item: " . $data_item ;
     }
 }

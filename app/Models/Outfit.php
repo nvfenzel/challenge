@@ -13,6 +13,16 @@ class Outfit extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'player_id',
+        'bota_id',
+        'arma_id',
+        'armadura_id',
+    ];
+
+
+
     public function player()
     {
         return $this->belongsTo(Player::class);

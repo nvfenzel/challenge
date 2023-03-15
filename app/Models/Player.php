@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Outfit;
+use App\Models\LastAttack;
 
 class Player extends Model
 {
@@ -36,5 +37,10 @@ class Player extends Model
     public function outfit()
     {
         return $this->hasOne(Outfit::class);
+    }
+
+    public function lastAttack()
+    {
+        return $this->hasOne(LastAttack::class);
     }
 }

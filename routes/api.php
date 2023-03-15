@@ -60,8 +60,10 @@ Route::middleware(['auth:sanctum', 'isAdmin'])->group(function () {
 // Estas son las rutas de los players y están protegidas para players logueados y que estén activos
 // Si un jugador no está activo el administrador lo tiene que dar de alta.
 Route::middleware(['auth:sanctum', 'isUser'])->group(function () {
-//     Route::post('/autorization', [ApiPlayerController::class, 'autorization']);
-        Route::get('/prueba', [ApiPlayerController::class, 'auth']);
+    //Esta ruta recibe como método GET y obtiene todos los palyers que también estén activos y listos para pelear
+    Route::get('/players_active', [ApiPlayerController::class, 'active']);
+    
+    Route::post('/player_atack', [ApiPlayerController::class, 'attack']);
 //     Route::post('/new_item', [ApiPlayerController::class, 'item']);
 //     Route::get('/items', [ApiPlayerController::class, 'items']);
 //     Route::post('/edit_item', [ApiPlayerController::class, 'edit']);

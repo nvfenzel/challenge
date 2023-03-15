@@ -13,7 +13,7 @@ class Bota extends Model
 
     public function outfit()
     {
-        return $this->belongsTo(Outfits::class);
+        return $this->belongsTo(Outfit::class);
     }
 
     public function item()

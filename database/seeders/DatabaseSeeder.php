@@ -12,6 +12,7 @@ use App\Models\Arma;
 use App\Models\Armadura;
 use App\Models\Outfit;
 use App\Models\Stock;
+use App\Models\LastAttack;
 
 class DatabaseSeeder extends Seeder
 {
@@ -38,10 +39,15 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
 
         Player::factory()->create([
-            'status' => fake()->randomElement(['activo', 'inactivo']),
+            'status' => 'activo',
             'type' => 'human',
             'user_id' => 2,
         ]);
+
+    //     LastAttack::factory()->create([
+    //         'player_id' => 1,
+    //         'type' => fake()->randomElement(['cuerpo', 'distancia', 'ulti']),
+    // ]);
 
         $users = User::count();
 
@@ -51,6 +57,12 @@ class DatabaseSeeder extends Seeder
                 'type' => fake()->randomElement(['zombie', 'human']),
                 'user_id' => $i,
           ]);
+          LastAttack::factory()->create([
+              'player_id' => $i-1,
+              'type_attack' => fake()->randomElement(['cuerpo', 'distancia', 'ulti']),
+              'created_at' => now(),
+              'updated_at' => now()
+      ]);
           }
 
           Items::factory(40)->create();

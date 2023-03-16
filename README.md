@@ -1,4 +1,3 @@
-Challenge***
 #### Índice:
 1. Instrucciones de juego.
 2. Instalación.

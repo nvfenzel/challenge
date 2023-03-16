@@ -67,6 +67,7 @@ class ApiAdminController extends Controller
             'name' => [ 'string', 'max:255', 'unique:items'],
             'pt_defense' => [ 'numeric', 'min:0', 'max:100'],
             'pt_attack' => [ 'numeric', 'min:0', 'max:100'],
+            'id' => [ 'numeric', 'in:items,id'],
         ]);
 
             $items_update = Items::where('id', $request->id)->first();

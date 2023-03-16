@@ -6,6 +6,8 @@ use App\Models\Api;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\LastAttack;
+use App\Models\Outfit;
 use App\Models\Player;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,7 @@ class ApiController extends Controller
    {
     $request->validate([
         'name' => ['required', 'string', 'max:255'],
-        'type' => ['required', 'string', 'max:255'],
+        'type' => ['required', 'string', 'max:255', 'in:human,zombie'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:8', 'confirmed'],
     ]);
@@ -30,9 +32,19 @@ class ApiController extends Controller
         'password' => Hash::make($request->password),
     ]);
 
-    $player_create = Player::insert([
+    Player::create([
         'user_id' => $user_create->id,
         'type' => $request->type,
+    ]);
+
+    $id_player = Player::where('user_id', $user_create->id)->first()->id;
+
+    Outfit::create([
+        'player_id' => $id_player
+    ]);
+
+    LastAttack::create([
+        'player_id' => $id_player
     ]);
 
     $user = User::where('email', $request->email)->first();

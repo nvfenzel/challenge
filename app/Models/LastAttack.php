@@ -10,6 +10,12 @@ class LastAttack extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'player_id',
+        'type_attack',
+    ];
+
     public function player()
     {
         return $this->belongsTo(Player::class);

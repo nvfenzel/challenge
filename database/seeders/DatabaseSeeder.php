@@ -30,103 +30,103 @@ class DatabaseSeeder extends Seeder
             'password' => '$2y$10$sehHW0Sg455QM/th6ccvoe3CqxXN2Nu2NuCFI/hLdajB57sp1DKz6'
         ]);
 
-        User::factory()->create([
-            'email' => 'user@user.com',
-            'account' => 'is_user',
-            'password' => '$2y$10$p1e/XVjb5Et6G7mMKYZ6K.NALxe6ftlZSl4/UaIcc3AscB18hkjAW'
-        ]);
+        // User::factory()->create([
+        //     'email' => 'user@user.com',
+        //     'account' => 'is_user',
+        //     'password' => '$2y$10$p1e/XVjb5Et6G7mMKYZ6K.NALxe6ftlZSl4/UaIcc3AscB18hkjAW'
+        // ]);
 
-        User::factory(20)->create();
+        // User::factory(20)->create();
+        
+        // Player::factory()->create([
+        //     'status' => 'activo',
+        //     'type' => 'human',
+        //     'user_id' => 2,
+        // ]);
 
-        Player::factory()->create([
-            'status' => 'activo',
-            'type' => 'human',
-            'user_id' => 2,
-        ]);
+        // Outfit::factory()->create([
+        //     'player_id' => 1,
+        // ]);
 
-    //     LastAttack::factory()->create([
-    //         'player_id' => 1,
-    //         'type' => fake()->randomElement(['cuerpo', 'distancia', 'ulti']),
-    // ]);
+    //     $users = User::count();
 
-        $users = User::count();
+    //     for ($i=3; $i < $users; $i++) { 
+    //       Player::factory()->create([
+    //             'status' => fake()->randomElement(['activo', 'inactivo']),
+    //             'type' => fake()->randomElement(['zombie', 'human']),
+    //             'user_id' => $i,
+    //       ]);
+    //       LastAttack::factory()->create([
+    //           'player_id' => $i-1,
+    //           'type_attack' => fake()->randomElement(['cuerpo', 'distancia', 'ulti']),
+    //           'created_at' => now(),
+    //           'updated_at' => now()
+    //   ]);
+    //         Outfit::factory()->create([
+    //             'player_id' => $i-1,
+    //         ]);
+    //       }
 
-        for ($i=3; $i < $users; $i++) { 
-          Player::factory()->create([
-                'status' => fake()->randomElement(['activo', 'inactivo']),
-                'type' => fake()->randomElement(['zombie', 'human']),
-                'user_id' => $i,
-          ]);
-          LastAttack::factory()->create([
-              'player_id' => $i-1,
-              'type_attack' => fake()->randomElement(['cuerpo', 'distancia', 'ulti']),
-              'created_at' => now(),
-              'updated_at' => now()
-      ]);
-          }
+        //   Items::factory(40)->create();
 
-          Items::factory(40)->create();
+        //   $items = Items::all();
 
-          $items = Items::all();
-
-          foreach ($items as $item) {
-            if ($item->type === 'bota') 
-            {
-                Bota::insert([
-                    'bota_id' => $item->id,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
-            if ($item->type === 'arma') 
-            {
-                Arma::insert([
-                    'arma_id' => $item->id,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
-            if ($item->type === 'armadura') 
-            {
-                Armadura::insert([
-                    'armadura_id' => $item->id,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-            }
+        //   foreach ($items as $item) {
+        //     if ($item->type === 'bota') 
+        //     {
+        //         Bota::insert([
+        //             'bota_id' => $item->id,
+        //             'created_at' => now(),
+        //             'updated_at' => now()
+        //         ]);
+        //     }
+        //     if ($item->type === 'arma') 
+        //     {
+        //         Arma::insert([
+        //             'arma_id' => $item->id,
+        //             'created_at' => now(),
+        //             'updated_at' => now()
+        //         ]);
+        //     }
+        //     if ($item->type === 'armadura') 
+        //     {
+        //         Armadura::insert([
+        //             'armadura_id' => $item->id,
+        //             'created_at' => now(),
+        //             'updated_at' => now()
+        //         ]);
+        //     }
           
-          }
+        //   }
 
 
-          for ($i=0; $i < 50; $i++) { 
+        //   for ($i=0; $i < 50; $i++) { 
             
-            $count_players = Player::count();
-            $count_items = Items::count();
+        //     $count_players = Player::count();
+        //     $count_items = Items::count();
             
-            Stock::factory()->create([
-                'player_id' => rand(1,$count_players),
-                'item_id' => rand(1,$count_items),
-              ]);
-            }
+        //     Stock::factory()->create([
+        //         'player_id' => rand(1,$count_players),
+        //         'item_id' => rand(1,$count_items),
+        //       ]);
+        //     }
 
-          $players = Player::all();
+        //   $players = Player::all();
 
-          foreach ($players as $player) 
-          {
-            $armadura = Armadura::get()->random(1);
-            $arma = Arma::get()->random(1);
-            $bota = Bota::get()->random(1);
+        //   foreach ($players as $player) 
+        //   {
+        //     $armadura = Armadura::get()->random(1);
+        //     $arma = Arma::get()->random(1);
+        //     $bota = Bota::get()->random(1);
 
-            Outfit::insert([
-                'player_id' => $player->id,
-                'armadura_id' => fake()->randomElement([null, $armadura[0]->id]),
-                'arma_id' => fake()->randomElement([null, $arma[0]->id]),
-                'bota_id' => fake()->randomElement([null, $bota[0]->id]),
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-          }
-
-
+        //     Outfit::insert([
+        //         'player_id' => $player->id,
+        //         'armadura_id' => fake()->randomElement([null, $armadura[0]->id]),
+        //         'arma_id' => fake()->randomElement([null, $arma[0]->id]),
+        //         'bota_id' => fake()->randomElement([null, $bota[0]->id]),
+        //         'created_at' => now(),
+        //         'updated_at' => now()
+        //     ]);
+        //   }
     }
 }

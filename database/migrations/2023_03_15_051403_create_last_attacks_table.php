@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('last_attacks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('player_id')->unique()->nullable();
+            $table->unsignedBigInteger('player_id')->unique();
             $table->foreign('player_id')->references('id')->on('players');
-            $table->string('type_attack')->nullable();
+            $table->string('type_attack')->default(null)->nullable();
             $table->timestamps();
         });
     }

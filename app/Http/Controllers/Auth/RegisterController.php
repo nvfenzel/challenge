@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\LastAttack;
+use App\Models\Outfit;
+use Illuminate\Validation\Rule;
 use App\Models\Player;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -52,7 +55,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'in:human,zombie','string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -72,13 +75,19 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        // dd($user_create['id']);
-
         Player::insert([
             'user_id' => $user_create['id'],
             'type' => $data['type'],
         ]);
 
+        Outfit::insert([
+            'player_id' => $user_create['id']
+        ]);
+
+        LastAttack::insert([
+            'player_id' => $user_create['id']
+        ]);
+        
         return $user_create;
     }
 }

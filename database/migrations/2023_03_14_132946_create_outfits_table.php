@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('player_id')->unique();
             $table->foreign('player_id')->references('id')->on('players');
-            $table->unsignedBigInteger('bota_id')->nullable();
+            $table->unsignedBigInteger('bota_id')->nullable()->default(null);
             $table->foreign('bota_id')->references('id')->on('items');
-            $table->unsignedBigInteger('arma_id')->nullable();
+            $table->unsignedBigInteger('arma_id')->nullable()->default(null);
             $table->foreign('arma_id')->references('id')->on('items');
-            $table->unsignedBigInteger('armadura_id')->nullable();
+            $table->unsignedBigInteger('armadura_id')->nullable()->default(null);
             $table->foreign('armadura_id')->references('id')->on('items');
             $table->timestamps();
         });

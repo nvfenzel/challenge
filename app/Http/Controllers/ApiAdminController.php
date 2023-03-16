@@ -12,6 +12,11 @@ class ApiAdminController extends Controller
     public function autorization(Request $request)
     {
 
+        $request->validate([
+            'id' => ['required', 'exists:players,id'],
+            'status' => ['required', 'in:activo,inactivo'],
+        ]);
+
         if ($request->status === 'activo' || $request->status ===  'inactivo')
         {
             $player_update = Player::where('id', $request->id)->first();

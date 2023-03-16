@@ -88,21 +88,21 @@ class ApiPlayerController extends Controller
         if (Items::where('id', $request->id)->first() && Stock::where('player_id', $my_player_id)->where('item_id', $request->id)->first()) {
             if (Items::where('id', $request->id)->first()->type === 'bota') {
                 Outfit::updateOrInsert(
-                    ['player_id' => Auth::id()],
+                    ['player_id' => $my_player_id],
                     ['bota_id' => $request->id]
                 );
                 return 'Bota cargada!';
             }
             if (Items::where('id', $request->id)->first()->type === 'armadura') {
                 Outfit::updateOrInsert(
-                    ['player_id' => Auth::id()],
+                    ['player_id' => $my_player_id],
                     ['armadura_id' => $request->id]
                 );
                 return 'Armadura cargada!';
             }
             if (Items::where('id', $request->id)->first()->type === 'arma') {
                 Outfit::updateOrInsert(
-                    ['player_id' => Auth::id()],
+                    ['player_id' => $my_player_id],
                     ['arma_id' => $request->id]
                 );
                 return 'Arma cargada!';
@@ -117,13 +117,15 @@ class ApiPlayerController extends Controller
     public function attack(Request $request)
     {
         $request->validate([
-            'id' => ['required', 'numeric'],
+            'id' => ['required', 'numeric', 'exists:players,id'],
             'type' => ['required', 'string', 'in:cuerpo,distancia,ulti']
             ]);
 
         $request->type === 'cuerpo' ? $type_attack_value = 1 : '';
         $request->type === 'distancia' ? $type_attack_value = 0.8 : '';
         $request->type === 'ulti' ? $type_attack_value = 2 : '';
+
+        $player_id = Player::where('user_id', Auth::id())->first()->id;
 
         if (Player::where('id', $request->id)->first()->life < 0) {
             Player::where('id', $request->id)
@@ -138,7 +140,7 @@ class ApiPlayerController extends Controller
             return 'No te tenes permitido utilizar el ULTI';
         }
 
-        if (Player::where('id', $request->id)->first()->id === Player::where('user_id', Auth::id())->first()->id) {
+        if (Player::where('id', $request->id)->first()->id === $player_id) {
             return 'No te podes atacar vos mismo';
         }
         
@@ -148,16 +150,16 @@ class ApiPlayerController extends Controller
 
         if (Player::where('id', $request->id)->first()->status === 'activo'){
 
-            if (LastAttack::where('player_id', Auth::id())->doesntExist() && $request->type === 'ulti') {
+            if (LastAttack::where('player_id', $player_id)->doesntExist() && $request->type === 'ulti') {
                 return 'No podés utilizar el ULTI si no has atacado cuerpo a cuerpo primero';
             }  
 
-            if (LastAttack::where('player_id', Auth::id())->first()->type_attack !== 'cuerpo' && $request->type === 'ulti') {
+            if (LastAttack::where('player_id', $player_id)->first()->type_attack !== 'cuerpo' && $request->type === 'ulti') {
                 return 'Tienes que atacar primero al cuerpo para utilizar el ULTI';
             }
 
             LastAttack::updateOrInsert(
-                ['player_id' => Auth::id()],
+                ['player_id' => $player_id],
                 ['type_attack' => $request->type]
             );
 
@@ -165,15 +167,15 @@ class ApiPlayerController extends Controller
 
             $player_outfit = Outfit::where('player_id', $request->id)->first();
 
-            $user_outfit = Outfit::where('player_id', Player::where('user_id', Auth::id())->first()->id)->first();
+            $user_outfit = Outfit::where('player_id', $player_id)->first();
 
             $bota_id_player = $player_outfit->bota_id;
             $arma_id_player = $player_outfit->arma_id;
             $armadura_id_player = $player_outfit->armadura_id;
             
-            $bota_id_player !== null ? $bota_defense = Items::where('id', $bota_id_player)->first()->pt_defense : $bota_defense = 5;
-            $arma_id_player !== null ? $arma_defense = Items::where('id', $arma_id_player)->first()->pt_defense : $arma_defense = 5;
-            $armadura_id_player !== null ? $armadura_defense = Items::where('id', $armadura_id_player)->first()->pt_defense : $armadura_defense = 5;
+            $bota_id_player !== null ? $bota_defense = Items::where('id', $bota_id_player)->first()->pt_defense : $bota_defense = 0;
+            $arma_id_player !== null ? $arma_defense = Items::where('id', $arma_id_player)->first()->pt_defense : $arma_defense = 0;
+            $armadura_id_player !== null ? $armadura_defense = Items::where('id', $armadura_id_player)->first()->pt_defense : $armadura_defense = 0;
 
             $total_pt_defense = $bota_defense + $arma_defense + $armadura_defense + 5;
             
@@ -181,13 +183,13 @@ class ApiPlayerController extends Controller
             $arma_id_user = $user_outfit->arma_id;
             $armadura_id_user = $user_outfit->armadura_id;
             
-            $bota_id_user !== null ? $bota_attack = Items::where('id', $bota_id_user)->first()->pt_attack : $bota_attack = 5;
-            $arma_id_user !== null ? $arma_attack = Items::where('id', $arma_id_user)->first()->pt_attack : $arma_attack = 5;
-            $armadura_id_user !== null ? $armadura_attack = Items::where('id', $armadura_id_user)->first()->pt_attack : $armadura_attack = 5;
+            $bota_id_user !== null ? $bota_attack = Items::where('id', $bota_id_user)->first()->pt_attack : $bota_attack = 0;
+            $arma_id_user !== null ? $arma_attack = Items::where('id', $arma_id_user)->first()->pt_attack : $arma_attack = 0;
+            $armadura_id_user !== null ? $armadura_attack = Items::where('id', $armadura_id_user)->first()->pt_attack : $armadura_attack = 0;
 
             $total_pt_attack = ($bota_attack + $arma_attack + $armadura_attack + 5)*$type_attack_value;
 
-            if ($total_pt_defense > $total_pt_attack) {
+            if ($total_pt_defense >= $total_pt_attack) {
                 if (($life_player-1) <= 0) {
                     Player::where('id', $request->id)
                     ->update([
